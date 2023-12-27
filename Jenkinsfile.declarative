@@ -1,16 +1,29 @@
 pipeline {
 
-agent { label 'Tomcat' }
+agent { label 'Agent-Tomcat' }
 
-	stages {		
+}
+
+	stages {	
+
+		stage('checkout') {
+    				steps {
+					git branch : 'main' url: https://github.com/Yashwinrajs/maven-web-application.git
+    					}
+  				}	
 		stage('build') {
     				steps {
-					sh 'mvn clean install -Dmaven.test.skip=true'
+					sh 'mvn clean package'
+    					}
+  				}
+		stage('post') {
+    				steps {
+					echo "This is post stage where the artifacts are stored in artifactory"
     					}
   				}
 		stage('deploy') {
     				steps {
-      					echo "deploy"
+      					echo "This deploy stage where the artifacts will be deployed to production environment"
     					}
   				}
 	
